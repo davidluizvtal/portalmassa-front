@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /** Colors */
+
+  --white: #ffffff;
+  --black: #000;
+  --green-100: #61ce70;
+  --blue-100: #6ec1e4;
+  --yellow-100: #f1ff00;
+  --gray-100: #7a7a7a;
+  --gray-200: #eeeeee;
+  --gray-300: #54595f;
+  --gray-500: #464643;
+  --gray-600: #404040;
+  --gray-800: #191918;
+}
+
+:focus {
+  outline: transparent;
+  box-shadow: 0 0 0 2px var(--yellow-100);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+body,
+input,
+button {
+  font-family: 'Roboto', sans-serif;
+}
