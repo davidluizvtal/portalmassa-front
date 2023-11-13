@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app-vtal-prod
+    image: app-vtal-prod
+    build:
+      dockerfile: ./docker/Dockerfile.prod
+      context: .
+      target: production
+    ports:
+      - "8080:80"

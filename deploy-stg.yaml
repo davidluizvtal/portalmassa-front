@@ -1,0 +1,58 @@
+apiVersion: apps.openshift.io/v1
+king: DeploymentConfig
+metadata:
+  name: portal-massas
+  labels:
+    app: portal-massas
+spec:
+  replicas: 1
+  selector:
+    app: portal-massas
+    deploymentconfig: portal-massas
+  template:
+    metadata:
+      labels:
+      app: portal-massas
+      deploymentconfig: portal-massas
+    spec:
+      containers:
+      - name: portal-massas
+      image: vtal/node
+      ports:
+      - containerPort: 80
+      resources:
+        limits:
+          cpu: "0.5"
+          memory: "512Mi"
+        requests:
+          cpu: "0.2"
+          memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: portal-massas
+  labels:
+    app: portal-massas
+spec:
+  selector:
+    app: portal-massas
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort:80
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: portal-massas-route
+spec:
+  to:
+    kind: Service
+    name: portal-massas
+  port:
+    targetPort: 80
+  tls:
+    termination: edge
+  wildcardPolicy: None

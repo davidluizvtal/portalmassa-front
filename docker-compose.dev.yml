@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: app-vtal-dev
+    image: app-vtal-dev
+    build:
+      dockerfile: ./docker/Dockerfile.dev
+      context: .
+      target: development
+    volumes:
+      - ./src:/app/src
+    ports: 
+      - 5173:5173
+    expose:
+      - "5173"
