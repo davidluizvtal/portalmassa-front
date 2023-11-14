@@ -12,7 +12,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:stable
+FROM nginx:1.17
 
 RUN chgrp -R 1001240000 /var/cache/nginx /var/run /var/log/nginx && \
     chmod -R 770 /var/cache/nginx /var/run /var/log/nginx && \
@@ -27,7 +27,7 @@ RUN find /usr/share/nginx/html/ -mindepth 1 -type d -exec chmod +x {} \;
 
 HEALTHCHECK --interval=5s --timeout=3s CMD curl --fail http://localhost:5173/ || exit
 
-EXPOSE 8080
+EXPOSE 8080:8080
 
 CMD ["nginx", "-g", "daemon off;"]
 
