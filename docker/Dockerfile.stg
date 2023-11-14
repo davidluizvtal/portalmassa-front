@@ -1,6 +1,6 @@
 FROM node:18.17.1-alpine AS builder
 ENV VITE_STAGE=prod
-ENV VITE_API_URL https://vtal-api-portal-massas.onrender.com/
+ENV VITE_API_URL https://portal-massa-api-git-pmas-portaldemassas-hml.apps.ocpcorp.vtal.intra/
 
 WORKDIR /usr/app/
 
