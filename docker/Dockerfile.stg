@@ -12,8 +12,9 @@ COPY . .
 
 RUN npm run build
 
-FROM bitnami/nginx:latest
+#FROM bitnami/nginx:latest
 #FROM nginx:1.17 as production
+FROM nginxinc/nginx-unprivileged:stable-alpine
 
 #RUN chmod -R g+rwx /var/cache/nginx /var/run /var/log/nginx
 #RUN chown -R nginx:0 /usr/share/nginx/html && \
@@ -35,10 +36,10 @@ FROM bitnami/nginx:latest
 COPY --from=builder /usr/app/dist /app
 
 # set file permissions for nginx user
-RUN chown -R nginx:nginx /var/cache/nginx /etc/nginx/
+#RUN chown -R nginx:nginx /var/cache/nginx /etc/nginx/
 
 # switch to non-root user
-USER nginx
+#USER nginx
 
 EXPOSE 8080
 CMD [ "nginx", "-g", "daemon off;" ]
