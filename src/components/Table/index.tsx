@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@components/Button";
+import * as HoverCard from "@radix-ui/react-hover-card";
+import * as Tooltip from "@radix-ui/react-tooltip";
 import { ITestResult } from "@shared/interfaces/test-result.interface";
+import { RotateCw, Sheet } from "lucide-react";
 import React, { useCallback, useEffect } from "react";
 
 interface DynamicTableProps {
   data: ITestResult[];
-  onExecute: (data: ITestResult) => void;
+  onExecute: (data: ITestResult, rerun: boolean) => void;
+  exportExcel: (data: ITestResult) => void;
   onPageChange: (newPage: number) => void;
   currentPage: number;
   totalItems: number;
@@ -25,6 +29,7 @@ const BADGECOLOR = {
 const DynamicTable: React.FC<DynamicTableProps> = ({
   data,
   onExecute,
+  exportExcel,
   onPageChange,
   currentPage,
   totalItems,
@@ -120,7 +125,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              className="flex justify-center px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
             >
               Ação
             </th>
@@ -140,24 +145,90 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   </div>
                 </div>
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {test.name}
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 cursor-help">
+                {test?.result?.status === "error" ? (
+                  <>
+                    <HoverCard.Root>
+                      <HoverCard.Trigger>{test.name}</HoverCard.Trigger>
+                      <HoverCard.Portal>
+                        <HoverCard.Content>
+                          <div className="bg-gray-300 p-4 max-w-[500px] max-h-[400px] break-words overflow-autop">
+                            {test?.result?.result}
+                          </div>
+                          <HoverCard.Arrow />
+                        </HoverCard.Content>
+                      </HoverCard.Portal>
+                    </HoverCard.Root>
+                  </>
+                ) : (
+                  test.name
+                )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {test.system.name}
               </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                {
-                  <Button
-                    className="sm:self-end sm:w-20"
-                    onClick={() => onExecute(test)}
-                    disabled={disableButton(test?.result?.status)}
-                    rounded="md"
-                    fluid
-                  >
-                    Executar
-                  </Button>
-                }
+              <td className="flex items-end justify-center px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div>
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <button
+                          className="sm:self-end sm:w-8"
+                          onClick={() => exportExcel(test)}
+                          disabled={test?.result?.status !== "finished"}
+                        >
+                          <Sheet />
+                        </button>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          className="TooltipContent"
+                          sideOffset={5}
+                        >
+                          Exportar para Excel
+                          <Tooltip.Arrow className="TooltipArrow" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
+                </div>
+                <div>
+                  <Tooltip.Provider>
+                    <Tooltip.Root>
+                      <Tooltip.Trigger asChild>
+                        <button
+                          className="sm:self-end sm:w-8"
+                          onClick={() => onExecute(test, true)}
+                          disabled={!test?.result?.status}
+                        >
+                          <RotateCw />
+                        </button>
+                      </Tooltip.Trigger>
+                      <Tooltip.Portal>
+                        <Tooltip.Content
+                          className="TooltipContent"
+                          sideOffset={5}
+                        >
+                          Re-Executar
+                          <Tooltip.Arrow className="TooltipArrow" />
+                        </Tooltip.Content>
+                      </Tooltip.Portal>
+                    </Tooltip.Root>
+                  </Tooltip.Provider>
+                </div>
+                <div>
+                  {
+                    <Button
+                      className="sm:self-end sm:w-15"
+                      onClick={() => onExecute(test, false)}
+                      disabled={disableButton(test?.result?.status)}
+                      rounded="md"
+                      fluid
+                    >
+                      Executar
+                    </Button>
+                  }
+                </div>
               </td>
             </tr>
           ))}

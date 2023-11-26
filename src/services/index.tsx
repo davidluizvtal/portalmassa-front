@@ -33,6 +33,24 @@ export async function getData<T>(
   });
   return res.data;
 }
+
+export async function getFile<T>(
+  path: RequestInfo | URL,
+  queryParams?: Record<string, any>
+) {
+  const url = new URL(`${apiURL}${path}`);
+  if (queryParams) {
+    Object.keys(queryParams).forEach((key) =>
+      url.searchParams.append(key, queryParams[key])
+    );
+  }
+
+  const res = await http.get<T>(url.toString(), {
+    headers: Object.assign(getHeaders()),
+    responseType: "arraybuffer",
+  });
+  return res.data;
+}
 export async function getPatch<T>(path: RequestInfo | URL, data: T) {
   const res = await http.patch<T>(`${apiURL}${path}`, data, {
     headers: Object.assign(getHeaders()),

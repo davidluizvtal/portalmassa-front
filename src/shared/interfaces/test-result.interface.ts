@@ -17,6 +17,7 @@ export interface ITestResult {
     build_number: string;
     id: string;
     status: IStatusTestResult;
+    result: never;
   };
 }
 export type IRunTestResponse = Pick<

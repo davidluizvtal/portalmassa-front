@@ -1,4 +1,4 @@
-import { getData, postData } from "@services/index";
+import { getData, getFile, postData } from "@services/index";
 import { DataResponse } from "@shared/interfaces/data-response.interface";
 import { PaginationResponse } from "@shared/interfaces/pagination-response.interface";
 import { IPayloadExecuteTest } from "@shared/interfaces/payload-execute-test.interface";
@@ -11,6 +11,7 @@ import { ITest } from "@shared/interfaces/tests.interface";
 
 const PATCH = "test";
 const PATCH_SYSTEM = "systems";
+const PATCH_RESULT_TEST = "results";
 
 interface ScriptParams {
   page: number;
@@ -28,6 +29,12 @@ export const getAllSystems = async (): Promise<
   DataResponse<PaginationResponse<ISystem>>
 > => {
   return getData<DataResponse<PaginationResponse<ISystem>>>(`${PATCH_SYSTEM}`);
+};
+
+export const getExportExcel = async (
+  result_id: string
+): Promise<ArrayBuffer> => {
+  return getFile(`${PATCH_RESULT_TEST}/to-excel/${result_id}`);
 };
 
 export const getTestsBySystemName = async (
@@ -56,9 +63,13 @@ export const getTestsBySystemName = async (
 
 export const runTest = async (
   test_id: string,
+  rerun: boolean,
   payload: IPayloadExecuteTest
 ): Promise<DataResponse<IRunTestResponse>> => {
-  return postData<IPayloadExecuteTest>(`${PATCH}/execute/${test_id}`, payload);
+  return postData<IPayloadExecuteTest>(
+    `${PATCH}/execute/${test_id}?rerun=${rerun}`,
+    payload
+  );
 };
 
 export const createTest = async (data: Partial<ITest>): Promise<ITest> => {

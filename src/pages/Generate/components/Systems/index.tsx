@@ -5,7 +5,11 @@ import DynamicTable from "@components/Table";
 import { TTestIdSchema, testIdSchema } from "@core/schemas/Tests.schema";
 import { Portal } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getTestsBySystemName, runTest } from "@pages/TestGeneration/services";
+import {
+  getExportExcel,
+  getTestsBySystemName,
+  runTest,
+} from "@pages/TestGeneration/services";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { IErrorResponse, apiURL } from "@services/index";
 import { ITestResult } from "@shared/interfaces/test-result.interface";
@@ -38,6 +42,7 @@ export function Systems({ name }: SystemsProps) {
   } | null>(null);
 
   const [open, setOpen] = useState(false);
+  const [rerun, setReRun] = useState(false);
 
   const { reset } = useForm<TTestIdSchema>({
     defaultValues: {
@@ -92,15 +97,23 @@ export function Systems({ name }: SystemsProps) {
         });
       }
       setOpen(false);
+      let payload: ITestParameters[] = [];
 
-      const payload: ITestParameters[] = test.parameters.map((pa, index) => {
-        return {
-          value: params[index].value,
-          field: pa.field,
-        } as unknown as ITestParameters;
-      });
+      if (params) {
+        payload = test.parameters.map((pa, index) => {
+          return {
+            value: params[index].value,
+            field: pa.field,
+          } as unknown as ITestParameters;
+        });
+      }
+      let _id = test.id;
 
-      const { data } = await runTest(test.id, { parameters: payload });
+      if (rerun) {
+        _id = test.result.id;
+      }
+
+      const { data } = await runTest(_id, rerun, { parameters: payload });
 
       const itemIndex = tests.findIndex((test) => test.id === data.test.id);
 
@@ -127,10 +140,37 @@ export function Systems({ name }: SystemsProps) {
     }
   };
 
-  async function handleExecute(data: ITestResult) {
+  const handleExecute = async (data: ITestResult, rerun: boolean) => {
     setTest(data);
-    setOpen(true);
-  }
+    setReRun(rerun);
+    if (rerun) {
+      startJob({ params: null });
+    } else {
+      setOpen(true);
+    }
+  };
+
+  const handleExportExcel = async (data: ITestResult) => {
+    const response = await getExportExcel(data.result.id);
+
+    const contentType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+    const blob = new Blob([response], { type: contentType });
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+
+    link.download = `${data.name}-massa.xlsx`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -179,6 +219,7 @@ export function Systems({ name }: SystemsProps) {
             itemsPerPage={10}
             onPageChange={handlePageChange}
             onExecute={handleExecute}
+            exportExcel={handleExportExcel}
             sorting={sorting}
             setSorting={setSorting}
           />

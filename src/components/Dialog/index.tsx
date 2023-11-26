@@ -61,7 +61,6 @@ const DialogComponent = ({
   };
 
   useEffect(() => {
-    console.log("open", open);
     setIsOpen(open);
     reset();
   }, [open, reset]);

@@ -22,11 +22,12 @@ export function CreateTest() {
   const [isloading, setloading] = useState(false);
 
   const {
-    formState: { isLoading, isSubmitting, errors },
+    formState: { isSubmitting, errors },
     handleSubmit,
     register,
     reset,
     control,
+    getValues,
   } = useForm<TTestSchema>({
     defaultValues: {
       name: "",
@@ -61,6 +62,7 @@ export function CreateTest() {
   };
 
   const handleCreateTest = async (data: ITest) => {
+    console.log("handleCreateTest");
     try {
       setloading(true);
       await createTest(data);
@@ -85,6 +87,11 @@ export function CreateTest() {
     setloading(true);
     getSystem();
   }, []);
+
+  useEffect(() => {
+    console.log(errors);
+    console.log(getValues());
+  }, [errors]);
 
   return (
     <div className="flex justify-center mt-10">
@@ -176,24 +183,7 @@ export function CreateTest() {
                         </span> */}
                       </div>
                     </div>
-                    {/*                     <div className="flex flex-col gap-1">
-                      <label
-                        htmlFor={`${param.id}${index}-value`}
-                        className="font-medium text-md text-vtal-gray-800"
-                      >
-                        Valor
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          id={`${param.id}${index}-value`}
-                          placeholder="Digite o valor"
-                          className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
-                          {...register(`parameters.${index}.value`)}
-                        />
-                       }
-                      </div>
-                    </div> */}
+
                     <div className="flex flex-col gap-1">
                       <label
                         htmlFor={`${param.id}${index}-type`}
@@ -218,7 +208,7 @@ export function CreateTest() {
                           />
                         )}
                       />
-                      {/*   <span className="text-red-500 text-xs absolute block">
+                      {/* <span className="text-red-500 text-xs absolute block">
                         {errors?.parameters[index]?.type?.message || ""}
                       </span> */}
                     </div>
@@ -254,7 +244,7 @@ export function CreateTest() {
             className="bg-vtal-gray-100 hover:bg-vtal-green-50 text-white py-2 px-4 rounded"
             type="submit"
             disabled={isSubmitting || isloading}
-            loading={isLoading}
+            loading={isloading}
           >
             Salvar
           </Button>

@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { Router } from "./routes";
-import { AuthProvider } from "./store/contexts/auth";
 import "./styles/global.css";
+import { AuthProvider } from "./store/contexts/auth";
 
 function App() {
   return (
@@ -12,4 +12,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
 export default App;
