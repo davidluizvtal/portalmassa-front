@@ -103,10 +103,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const signOut = (id: string, online = false) => {
-    if (id) {
-      updateOnline(id, online);
-    }
-
+    updateOnline(id, online);
     setToken("");
     localStorage.clear();
     navigate("/auth/login");

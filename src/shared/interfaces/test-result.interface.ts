@@ -18,11 +18,12 @@ export interface ITestResult {
     id: string;
     status: IStatusTestResult;
     result: never;
+    error_job: string;
   };
 }
 export type IRunTestResponse = Pick<
   ITestResult,
   "id" | "name" | "system" | "test"
-> & { status: IStatusTestResult; user: TUser };
+> & { status: IStatusTestResult; user: TUser; error_job: string };
 
 export type IStatusTestResult = "pending" | "waiting" | "finished" | "error";

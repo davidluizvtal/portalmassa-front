@@ -153,7 +153,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                       <HoverCard.Portal>
                         <HoverCard.Content>
                           <div className="bg-gray-300 p-4 max-w-[500px] max-h-[400px] break-words overflow-autop">
-                            {test?.result?.result}
+                            {test?.result?.error_job}
                           </div>
                           <HoverCard.Arrow />
                         </HoverCard.Content>

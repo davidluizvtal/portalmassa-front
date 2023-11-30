@@ -120,6 +120,7 @@ export function Systems({ name }: SystemsProps) {
       if (itemIndex !== -1) {
         tests[itemIndex].result.id = data.id;
         tests[itemIndex].result.status = data.status;
+        tests[itemIndex].result.error_job = data.error_job;
       }
 
       setTests(tests);

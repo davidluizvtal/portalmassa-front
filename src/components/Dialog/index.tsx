@@ -3,16 +3,17 @@ import {
   TParametersSchemaSchema,
   parametersSchema,
 } from "@core/schemas/parameters.schema";
-import { Transition } from "@headlessui/react";
+import { Listbox, Transition } from "@headlessui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { clsx } from "clsx";
 import { X } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 interface ParametersDialogProps {
   field: string;
   type: string;
+  value_default: string;
 }
 interface ParametersDialogResponseProps {
   value: string;
@@ -42,12 +43,12 @@ const DialogComponent = ({
   if (!parameters) {
     parameters = [];
   }
-
   const {
-    formState: { isLoading, isSubmitting },
+    formState: { isLoading, isSubmitting, isValid },
     register,
     reset,
     handleSubmit,
+    control,
   } = useForm<TParametersSchemaSchema>({
     defaultValues: {
       params: [],
@@ -64,6 +65,16 @@ const DialogComponent = ({
     setIsOpen(open);
     reset();
   }, [open, reset]);
+
+  useEffect(() => {
+    if (!parameters) {
+      parameters = [];
+    }
+    /*     if (parameters?.type === "select") {
+      const steps = parameters?.default_values.split("\n");
+      setStepsTest(steps);
+    } */
+  }, [parameters]);
 
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={setIsOpen}>
@@ -116,10 +127,15 @@ const DialogComponent = ({
                   onSubmit={handleSubmit(onStart)}
                 >
                   {parameters.map((param, index) => {
+                    let steps: string[] = [];
+
+                    if (param.type === "select" && param.value_default) {
+                      steps = param.value_default.split("\n");
+                    }
+
                     return (
                       <div key={`${param.field}-${index}`}>
                         <fieldset className="flex-col-2 ">
-                          {/* <legend>Choose your favorite monster</legend> */}
                           <label
                             htmlFor={param.field}
                             className="text-xs font-medium text-gray-700 dark:text-gray-400"
@@ -127,17 +143,46 @@ const DialogComponent = ({
                             {param.field.charAt(0).toUpperCase() +
                               param.field.slice(1)}
                           </label>
-                          <input
-                            id={param.field}
-                            type={param.type}
-                            placeholder={`Digite o ${
-                              param.field.charAt(0).toUpperCase() +
-                              param.field.slice(1)
-                            }`}
-                            {...register(`params.${index}.value`)}
-                            autoComplete="given-name"
-                            className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
-                          />
+                          {param.type == "select" ? (
+                            <div className="relative">
+                              <Controller
+                                control={control}
+                                name={`params.${index}.value`}
+                                render={({ field }) => (
+                                  <Listbox
+                                    value={field.value}
+                                    onChange={field?.onChange}
+                                  >
+                                    <div className="relative">
+                                      <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-2 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
+                                        {field.value || "Selecionar"}
+                                      </Listbox.Button>
+                                    </div>
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                      {steps.map((step) => (
+                                        <Listbox.Option key={step} value={step}>
+                                          {step}
+                                        </Listbox.Option>
+                                      ))}
+                                    </Listbox.Options>
+                                  </Listbox>
+                                )}
+                              />
+                            </div>
+                          ) : (
+                            <input
+                              id={param.field}
+                              type={param.type}
+                              value={param.value_default}
+                              placeholder={`Digite o ${
+                                param.field.charAt(0).toUpperCase() +
+                                param.field.slice(1)
+                              }`}
+                              {...register(`params.${index}.value`)}
+                              autoComplete="given-name"
+                              className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
+                            />
+                          )}
                         </fieldset>
                       </div>
                     );
@@ -148,7 +193,7 @@ const DialogComponent = ({
                       <Button
                         className="bg-vtal-gray-100 hover:bg-vtal-green-50 text-white py-2 px-4 rounded"
                         type="submit"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || !isValid}
                         loading={isLoading}
                       >
                         Start

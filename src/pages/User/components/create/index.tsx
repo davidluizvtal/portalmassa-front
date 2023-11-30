@@ -35,6 +35,10 @@ export function CreateUser() {
 
   const [roles, setRoles] = useState<IRole[]>([]);
 
+  const onBack = async () => {
+    navigate("/user", { state: null });
+  };
+
   const getAllRole = async () => {
     try {
       const { data } = await getAllRoles();
@@ -180,17 +184,29 @@ export function CreateUser() {
           )}
         </div>
       </div>
-      <div className="flex items-center justify-center mt-20">
-        <Button
-          className="sm:self-end sm:w-20"
-          type="submit"
-          disabled={isSubmitting || isloading}
-          loading={isloading}
-          rounded="md"
-          fluid
-        >
-          Salvar
-        </Button>
+      <div className="flex items-center justify-center mt-20 gap-2">
+        <div>
+          <Button
+            className="sm:self-end sm:w-20"
+            onClick={onBack}
+            rounded="md"
+            fluid
+          >
+            Cancelar
+          </Button>
+        </div>
+        <div>
+          <Button
+            className="sm:self-end sm:w-20"
+            type="submit"
+            disabled={isSubmitting || isloading}
+            loading={isloading}
+            rounded="md"
+            fluid
+          >
+            Salvar
+          </Button>
+        </div>
       </div>
     </form>
   );

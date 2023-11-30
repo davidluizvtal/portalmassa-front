@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import http from "@services/httpService";
 
-export const apiURL =
-  "https://portalmassa-api-pmas-portaldemassas-hml.apps.ocpcorp.vtal.intra/";
-//export const apiURL = "http://172.30.147.110:3000/";
-//export const apiURL = import.meta.env.VITE_API_URL;
+export const apiURL = import.meta.env.VITE_API_URL;
 
 export interface TokenParsed {
   token: string;

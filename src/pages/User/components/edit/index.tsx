@@ -88,6 +88,10 @@ export function EditUser() {
     }
   }
 
+  const onBack = async () => {
+    navigate("/user", { state: null });
+  };
+
   useEffect(() => {
     if (location?.state?.id) {
       setloading(true);
@@ -232,23 +236,35 @@ export function EditUser() {
           </div>
         }
       </div>
-      <div className="flex items-center justify-center mt-20">
+      <div className="flex items-center justify-center mt-20 gap-2">
         {isloading ? (
           <div className="space-y-2 relative">
             <PulseComponent className="sm:self-end sm:w-20 h-12" items={[1]} />
           </div>
         ) : (
           <>
-            <Button
-              className="sm:self-end sm:w-20"
-              type="submit"
-              disabled={isSubmitting}
-              loading={isloading}
-              rounded="md"
-              fluid
-            >
-              Salvar
-            </Button>
+            <div>
+              <Button
+                className="sm:self-end sm:w-20"
+                onClick={onBack}
+                rounded="md"
+                fluid
+              >
+                Cancelar
+              </Button>
+            </div>
+            <div>
+              <Button
+                className="sm:self-end sm:w-20"
+                type="submit"
+                disabled={isSubmitting}
+                loading={isloading}
+                rounded="md"
+                fluid
+              >
+                Salvar
+              </Button>
+            </div>
           </>
         )}
       </div>

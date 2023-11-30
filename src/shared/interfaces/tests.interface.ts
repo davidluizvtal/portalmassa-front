@@ -14,4 +14,5 @@ export interface ITest {
 export interface ITestParameters {
   field: string;
   type: string;
+  value_default: string;
 }

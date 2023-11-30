@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@components/Button";
-//import FormListbox from "@components/ListBox";
 import FormListbox from "@components/ListBox";
 import { PulseComponent } from "@components/PulseList";
 import { EFieldsType } from "@core/enums/fields-type.enum";
@@ -62,12 +61,12 @@ export function CreateTest() {
   };
 
   const handleCreateTest = async (data: ITest) => {
-    console.log("handleCreateTest");
     try {
       setloading(true);
+
       await createTest(data);
       reset();
-      navigate("/test", { state: null });
+      //navigate("/test", { state: null });
 
       toast.success("Teste criado com sucesso!", {
         icon: "👏",
@@ -162,56 +161,86 @@ export function CreateTest() {
                   key={param.id}
                   className="flex gap-3 items-end flex-col md:flex-row pt-6 md:pt-3"
                 >
-                  <div className="grid md:grid-cols-3 flex-1 gap-2 items-center">
-                    <div className="flex flex-col gap-1">
-                      <label
-                        htmlFor={`${param.id}${index}-field`}
-                        className="font-medium text-md text-vtal-gray-800"
-                      >
-                        Nome
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          id={`${param.id}${index}-field`}
-                          placeholder="Digite o nome do campo"
-                          className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
-                          {...register(`parameters.${index}.field`)}
-                        />
-                        {/*  <span className="text-red-500 text-xs absolute block">
+                  <div className="flex md:grid-cols-2 flex-1 gap-2 items-center">
+                    <div className="grid grid-cols-[200px_minmax(200px,_1fr)_110px] gap-4">
+                      <div className="flex flex-col gap-1">
+                        <label
+                          htmlFor={`${param.id}${index}-field`}
+                          className="font-medium text-md text-vtal-gray-800"
+                        >
+                          Nome
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            id={`${param.id}${index}-field`}
+                            placeholder="Digite o nome do campo"
+                            className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
+                            {...register(`parameters.${index}.field`)}
+                          />
+                          {/*  <span className="text-red-500 text-xs absolute block">
                           {errors?.parameters[index]?.field?.message || ""}
                         </span> */}
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label
+                          htmlFor={`${param.id}${index}-field`}
+                          className="font-medium text-md text-vtal-gray-800"
+                        >
+                          Valor Default
+                        </label>
+                        <div className="relative ">
+                          <textarea
+                            name={`${param.id}${index}-field`}
+                            id={`${param.id}${index}-field`}
+                            rows={1}
+                            placeholder="Digite os as opções"
+                            className="bg-vtal-gray-200 resize-none border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
+                            {...register(`parameters.${index}.value_default`)}
+                          />
+                          {/*  <input
+                          type="text"
+                          id={`${param.id}${index}-field`}
+                          placeholder="Digite os as opções"
+                          className="bg-vtal-gray-200 border border-vtal-gray-400 text-vtal-gray-700 placeholder:text-vtal-gray-400 rounded-md py-2 px-4 w-full"
+                          {...register(`parameters.${index}.field`)}
+                        /> */}
+                          {/*  <span className="text-red-500 text-xs absolute block">
+                          {errors?.parameters[index]?.field?.message || ""}
+                        </span> */}
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label
+                          htmlFor={`${param.id}${index}-type`}
+                          className="font-medium text-md text-vtal-gray-800"
+                        >
+                          Tipo
+                        </label>
+                        <Controller
+                          control={control}
+                          name={`parameters.${index}.type`}
+                          render={({ field: { value, onChange } }) => (
+                            <FormListbox
+                              data={Object.values(EFieldsType).map((type) => ({
+                                id: type,
+                                name:
+                                  type.charAt(0).toUpperCase() + type.slice(1),
+                              }))}
+                              value={value as EFieldsType}
+                              onSelect={(type) =>
+                                onChange(type.id as EFieldsType)
+                              }
+                            />
+                          )}
+                        />
+                        {/* <span className="text-red-500 text-xs absolute block">
+                        {errors?.parameters[index]?.type?.message || ""}
+                      </span> */}
                       </div>
                     </div>
 
-                    <div className="flex flex-col gap-1">
-                      <label
-                        htmlFor={`${param.id}${index}-type`}
-                        className="font-medium text-md text-vtal-gray-800"
-                      >
-                        Tipo
-                      </label>
-                      <Controller
-                        control={control}
-                        name={`parameters.${index}.type`}
-                        render={({ field: { value, onChange } }) => (
-                          <FormListbox
-                            data={Object.values(EFieldsType).map((type) => ({
-                              id: type,
-                              name:
-                                type.charAt(0).toUpperCase() + type.slice(1),
-                            }))}
-                            value={value as EFieldsType}
-                            onSelect={(type) =>
-                              onChange(type.id as EFieldsType)
-                            }
-                          />
-                        )}
-                      />
-                      {/* <span className="text-red-500 text-xs absolute block">
-                        {errors?.parameters[index]?.type?.message || ""}
-                      </span> */}
-                    </div>
                     <div className="flex flex-col gap-6">
                       <label className="font-medium text-md text-vtal-gray-800"></label>
                       <button

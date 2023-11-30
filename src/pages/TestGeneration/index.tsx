@@ -1,9 +1,9 @@
-import ListTests from "./components/ListTests";
+import { CreateTest } from "./components/create";
 
 export function TestGeneration() {
   return (
     <div>
-      <ListTests />
+      <CreateTest />
     </div>
   );
 }
