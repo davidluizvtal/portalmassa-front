@@ -14,10 +14,9 @@ import { Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 export function CreateTest() {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [isloading, setloading] = useState(false);
 
   const {
