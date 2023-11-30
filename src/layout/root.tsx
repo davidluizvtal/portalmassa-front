@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import userDefaultImg from "../assets/user-default.png";
 import { useAuth } from "../store/contexts/auth";
 
 type Children = Pick<ILink, "name" | "path" | "icon">;
@@ -60,12 +61,12 @@ const links: ILink[] = [
       {
         name: "FTTH-WHITELABEL",
         path: "/generate/FTTH-WHITELABEL",
-        icon: ScrollText,
+        icon: ScrollText /*  */,
       },
-      { name: "FTTH-VOIP", path: "/generate/FTTH-VOIP", icon: ScrollText },
+      /*       { name: "FTTH-VOIP", path: "/generate/FTTH-VOIP", icon: ScrollText },
       { name: "NETWIN", path: "/generate/NETWIN", icon: ScrollText },
       { name: "NETQ", path: "/generate/NETQ", icon: ScrollText },
-      { name: "BSS", path: "/generate/BSS", icon: ScrollText },
+      { name: "BSS", path: "/generate/BSS", icon: ScrollText }, */
     ] as Children[],
   },
 ];
@@ -143,10 +144,7 @@ export const RootLayout = () => {
           <div className="rounded-sm bg-zinc-600 w-full px-2 py-4">
             <div className="text-zinc-50 text-center flex items-center md:items-start flex-col md:flex-row gap-3">
               <div className="text-base flex items-center gap-2 flex-1">
-                <img
-                  src="https://github.com/davidluizip.png"
-                  className="rounded-full w-10 h-10"
-                />
+                <img src={userDefaultImg} className="rounded-full w-10 h-10" />
                 {user && (
                   <span className="text-zinc-200 text-sm hidden md:block">
                     {user.username}

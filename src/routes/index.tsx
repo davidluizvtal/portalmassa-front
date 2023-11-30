@@ -40,13 +40,13 @@ export function Router() {
           path="generate/FTTH-WHITELABEL"
           element={<Systems name="FTTH-WHITELABEL" />}
         />
-        <Route
+        {/*     <Route
           path="generate/FTTH-VOIP"
           element={<Systems name="FTTH-VOIP" />}
         />
         <Route path="generate/NETWIN" element={<Systems name="NETWIN" />} />
         <Route path="generate/NETQ" element={<Systems name="NETQ" />} />
-        <Route path="generate/BSS" element={<Systems name="BSS" />} />
+        <Route path="generate/BSS" element={<Systems name="BSS" />} /> */}
       </Route>
       <Route path="/auth" element={<AuthLayout />}>
         <Route path="login" index element={<Login />} />
