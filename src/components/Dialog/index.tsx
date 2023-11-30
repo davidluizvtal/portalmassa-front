@@ -173,7 +173,6 @@ const DialogComponent = ({
                             <input
                               id={param.field}
                               type={param.type}
-                              value={value}
                               placeholder={`Digite o ${
                                 param.field.charAt(0).toUpperCase() +
                                 param.field.slice(1)
